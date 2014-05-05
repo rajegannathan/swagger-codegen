@@ -18,6 +18,8 @@ import org.apache.http.impl.conn.*;
 import org.apache.http.params.*;
 import org.apache.http.util.EntityUtils;
 
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+
 import java.io.File;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -212,6 +214,13 @@ public class ApiInvoker {
   }
 
   private HttpClient getClient(String host) {
+        DefaultHttpClient client = new DefaultHttpClient();
+        ClientConnectionManager mgr = client.getConnectionManager();
+        HttpParams params = client.getParams();
+        client = new DefaultHttpClient(new ThreadSafeClientConnManager(params, 
+                                      mgr.getSchemeRegistry()), params);
+        return client;
+        /*
     if (client == null) {
       if (ignoreSSLCertificates && ignoreSSLConnectionManager != null) {
         // Trust self signed certificates
@@ -220,7 +229,7 @@ public class ApiInvoker {
         client = new DefaultHttpClient();
       }
     }
-    return client;
+    return client; */
   }
 
   private void initConnectionManager() {

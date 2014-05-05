@@ -16,15 +16,42 @@ public class UserApi {
   public ApiInvoker getInvoker() {
     return apiInvoker;
   }
-  
+
   public void setBasePath(String basePath) {
     this.basePath = basePath;
   }
-  
+
   public String getBasePath() {
     return basePath;
   }
 
+  public void logoutUser () throws ApiException {
+    // create path and map variables
+    String path = "/user/logout".replaceAll("\\{format\\}","json");
+
+    // query params
+    Map<String, String> queryParams = new HashMap<String, String>();
+    Map<String, String> headerParams = new HashMap<String, String>();
+
+    String contentType = "application/json";
+
+    try {
+      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, null, headerParams, contentType);
+      if(response != null){
+        return ;
+      }
+      else {
+        return ;
+      }
+    } catch (ApiException ex) {
+      if(ex.getCode() == 404) {
+        return ;
+      }
+      else {
+        throw ex;
+      }
+    }
+  }
   public void createUser (User body) throws ApiException {
     // verify required params are set
     if(body == null ) {
@@ -240,33 +267,6 @@ public class UserApi {
     } catch (ApiException ex) {
       if(ex.getCode() == 404) {
         return null;
-      }
-      else {
-        throw ex;
-      }
-    }
-  }
-  public void logoutUser () throws ApiException {
-    // create path and map variables
-    String path = "/user/logout".replaceAll("\\{format\\}","json");
-
-    // query params
-    Map<String, String> queryParams = new HashMap<String, String>();
-    Map<String, String> headerParams = new HashMap<String, String>();
-
-    String contentType = "application/json";
-
-    try {
-      String response = apiInvoker.invokeAPI(basePath, path, "GET", queryParams, null, headerParams, contentType);
-      if(response != null){
-        return ;
-      }
-      else {
-        return ;
-      }
-    } catch (ApiException ex) {
-      if(ex.getCode() == 404) {
-        return ;
       }
       else {
         throw ex;
